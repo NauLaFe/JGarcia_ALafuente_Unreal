@@ -23,6 +23,7 @@ public:
 	{
 		index = Index;
 	}
+
 };
 
 UCLASS()
@@ -41,25 +42,38 @@ public:
 	class USphereComponent *sphereComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Field Properties")
-	int32 numberOfMines;
+	int32 numberOfMines = 20;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Field Properties")
-	float campExtend;
+	float campExtend = 5000.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mine Properties")
-	float damage;
+	float damage = 10.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mine Properties")
-	float speed;
+	float speed = 10.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mine Properties")
-	float mineScale;
-	
+	float mineScale = 100.0f;
+
+	UPROPERTY(EditDefaultsonly)
+	class UParticleSystem *ParticleSystemTemplate;
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "Destroy event")
 	void DestroyEffect(FVector Location);
 
 	UFUNCTION()
 	void BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
+
+	UFUNCTION()
+	void EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+private:
+	bool pursue = false;
+
+	void MineHit(int idx);
+
+	void PursuePlayer(int idx); 
 
 protected:
 	// Called when the game starts or when spawned
